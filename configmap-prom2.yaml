@@ -49,7 +49,6 @@ data:
     - job_name: 'Pods'
       kubernetes_sd_configs:
       - role: pod
-      scheme: https
       relabel_configs:
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
