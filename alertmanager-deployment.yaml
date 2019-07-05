@@ -34,3 +34,6 @@ spec:
           name: alertmanager-config
       - name: alertmanager
         emptyDir: {}
+
+        
+        
