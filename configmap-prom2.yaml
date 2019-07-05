@@ -26,6 +26,14 @@ data:
         annotations:
           identifier: '{{ $labels.instance }}'
           description: Prometheus is down
+      - alert: Pod down 
+        expr: up{job_name="Pods"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          identifier: '{{ $labels.instance }}'
+          description: Pod '{{$labels.kubernetes_pod_name}}' is down
   prometheus.yml: |-
     global:
       scrape_interval: 5s
