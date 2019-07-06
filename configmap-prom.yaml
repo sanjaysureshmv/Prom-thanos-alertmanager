@@ -6,29 +6,26 @@ metadata:
     name: prometheus-server-conf
   namespace: monitoring
 data:
-  prometheus_rules.yml: |
+  prometheus.rules: |-
     groups:
     - name:  test alert
       rules:
       - alert: High Pod Memory [test]
-        expr: sum(container_memory_usage_bytes) > 1
-        for: 5m
+        expr: kube_pod_container_status_ready == 1
+        for: 2m
         labels:
           severity: slack
-          team: DevOps
         annotations:
           identifier: '{{ $labels.instance }}'
           description: High Memory Usage
       - alert: Prometheus down [test]
-        expr: up{kubernetes_pod_name=~"prometheus-deployment-[^2].*"} == 0
-        for: 2m
+        expr: up{kubernetes_pod_name=~"prometheus-deployment-[^2].*"} == 1
+        for: 1m
         labels:
           severity: critical
-          team: Infra
         annotations:
           identifier: '{{ $labels.instance }}'
           description: Prometheus is down
-
   prometheus.yml: |-
     global:
       scrape_interval: 5s
@@ -43,7 +40,7 @@ data:
       - scheme: http
         static_configs:
         - targets:
-          - "alertmanager"
+          - "alertmanager:9093"
     scrape_configs:
     - job_name: 'kubestate-metrics'
       static_configs:
