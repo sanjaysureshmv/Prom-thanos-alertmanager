@@ -6,7 +6,7 @@ metadata:
     name: prometheus-server-conf
   namespace: monitoring
 data:
-  prometheus.rules: |-
+  prometheus.rules: |
     groups:
     - name:  test alert
       rules:
@@ -15,6 +15,7 @@ data:
         for: 5m
         labels:
           severity: slack
+          team: DevOps
         annotations:
           identifier: '{{ $labels.instance }}'
           description: High Memory Usage
@@ -23,17 +24,11 @@ data:
         for: 2m
         labels:
           severity: critical
+          team: Infra
         annotations:
           identifier: '{{ $labels.instance }}'
           description: Prometheus is down
-      - alert: Pod down 
-        expr: up{job_name="Pods"} == 0
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          identifier: '{{ $labels.instance }}'
-          description: Pod '{{$labels.kubernetes_pod_name}}' is down
+
   prometheus.yml: |-
     global:
       scrape_interval: 5s
