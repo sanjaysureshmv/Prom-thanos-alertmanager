@@ -17,6 +17,7 @@ data:
     #   equal: ['instance_dg']
 
     route:
+      group_by: [alertname]
       receiver: alert-emailer
       group_wait: 10s
       repeat_interval: 4h

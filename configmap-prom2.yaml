@@ -10,19 +10,21 @@ data:
     groups:
     - name:  test alert
       rules:
-      - alert: High Pod Memory [test]
+      - alert: Pod not ready [test]
         expr: kube_pod_container_status_ready == 1
         for: 2m
         labels:
           severity: slack
+          team: DevOps
         annotations:
           identifier: '{{ $labels.instance }}'
-          description: High Memory Usage
+          description: Pods not ready (not actually)
       - alert: Prometheus down [test]
-        expr: up{kubernetes_pod_name=~"prometheus-deployment-[^2].*"} == 1
+        expr: up{kubernetes_pod_name=~"prometheus-deployment-[^2].*"} == 0
         for: 1m
         labels:
           severity: critical
+          team: SRE
         annotations:
           identifier: '{{ $labels.instance }}'
           description: Prometheus is down
@@ -57,3 +59,13 @@ data:
       - source_labels: [__meta_kubernetes_pod_name]
         action: replace
         target_label: kubernetes_pod_name
+      - source_labels: ['__address__']
+        separator:     ':'
+        regex:         '(.*):(80)'
+        target_label:  '__address__'
+        action: drop
+      - source_labels: ['__address__']
+        separator:     ':'
+        regex:         '(.*):(53)'
+        target_label:  '__address__'
+        action: drop
