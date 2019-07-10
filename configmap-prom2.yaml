@@ -11,14 +11,14 @@ data:
     - name:  test alert
       rules:
       - alert: Pod not ready [test]
-        expr: kube_pod_container_status_ready == 1
+        expr: kube_pod_container_status_ready == 0
         for: 2m
         labels:
           severity: slack
           team: DevOps
         annotations:
           identifier: '{{ $labels.instance }}'
-          description: Pods not ready (not actually)
+          description: Pods not ready
       - alert: Prometheus down [test]
         expr: up{kubernetes_pod_name=~"prometheus-deployment-[^2].*"} == 0
         for: 1m
@@ -28,6 +28,15 @@ data:
         annotations:
           identifier: '{{ $labels.instance }}'
           description: Prometheus is down
+      - alert: Kubernetes core components running
+        expr: kube_deployment_status_replicas_unavailable{ namespace="kube-system"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: SRE
+        annotations:
+          identifier: '{{ $labels.instance }}'
+          description: Core components not running properly, values={{$value}}
   prometheus.yml: |-
     global:
       scrape_interval: 5s

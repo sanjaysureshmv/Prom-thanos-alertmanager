@@ -20,6 +20,7 @@ spec:
         args:
           - "--config.file=/etc/alertmanager/config.yml"
           - "--storage.path=/alertmanager"
+          - "--log.level=debug"
         ports:
         - name: alertmanager
           containerPort: 9093
