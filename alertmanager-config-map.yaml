@@ -8,41 +8,28 @@ data:
     global:
     templates:
     - '/etc/alertmanager/*.tmpl'
-    # inhibit_rules:
-    # - source_match:
-    #     severity: 'critical'
-    #     alertname: 'Prometheus down [test]'
-    #   target_match:
-    #     severity: 'slack'
-    #   equal: ['instance_dg']
-
+    inhibit_rules:
+    - source_match:
+        severity: 'critical'
+        alertname: 'Kubernetes core components running'
+      target_match:
+        severity: 'slack'
+      equal: ['non_exstent_label']
     route:
       group_by: [alertname]
       receiver: alert-emailer
-      group_wait: 10s
+      group_wait: 30s
+      group_interval: 5m
       repeat_interval: 4h
       routes:
         - receiver: slack_demo
-        # Send severity=slack alerts to slack.
           match:
             severity: slack
-          group_wait: 10s
-          repeat_interval: 1m
-        # - receiver: pager
-        # # Send severity=slack alerts to slack.
-        #   match:
-        #     severity: critical
-        #   group_wait: 10s
-        #   repeat_interval: 1m
+          repeat_interval: 4h
         - receiver: slack_critical
-        # Send severity=slack alerts to slack.
           match_re:
             severity: critical
-
-          group_wait: 10s
-          repeat_interval: 1m
-        
- 
+          repeat_interval: 4h
     receivers:
     - name: alert-emailer
       email_configs:
