@@ -39,11 +39,11 @@ data:
           description: Core components not running properly, values={{$value}}
   prometheus.yml: |-
     global:
-      scrape_interval: 5s
+      scrape_interval: 30s
       external_labels:
         monitor: test-infra
         replica: test-prom-1
-      evaluation_interval: 5s
+      evaluation_interval: 40s
     rule_files:
       - /etc/prometheus/prometheus.rules
     alerting:
@@ -78,4 +78,7 @@ data:
         separator:     ':'
         regex:         '(.*):(53)'
         target_label:  '__address__'
+        action: drop
+      - source_labels: [replica]
+        regex: 'test-prom-(.+)'
         action: drop
