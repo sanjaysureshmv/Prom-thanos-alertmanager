@@ -52,6 +52,7 @@ data:
         static_configs:
         - targets:
           - "alertmanager:9093"
+          - "alertmanager-2:9093"
     scrape_configs:
     - job_name: 'kubestate-metrics'
       static_configs:

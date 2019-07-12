@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alertmanager
+  name: alertmanager-2
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: alertmanager
+      app: alertmanager-2
   template:
     metadata:
       name: alertmanager
       labels:
-        app: alertmanager
+        app: alertmanager-2
     spec:
       containers:
       - name: alertmanager
@@ -21,7 +21,7 @@ spec:
           - "--config.file=/etc/alertmanager/config.yml"
           - "--storage.path=/alertmanager"
           - "--log.level=debug"
-          - "--cluster.peer=alertmanager-2:9094"
+          - "--cluster.peer=alertmanager:9094"
         ports:
         - name: alertmanager
           containerPort: 9093
@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: alertmanager-config
+          name: alertmanager-config2
       - name: alertmanager
         emptyDir: {}
 

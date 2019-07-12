@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: alertmanager
+  name: alertmanager-2
   namespace: monitoring
   annotations:
       prometheus.io/scrape: 'true'
@@ -9,13 +9,13 @@ metadata:
       prometheus.io/port:   '8080'
 spec:
   selector: 
-    app: alertmanager
+    app: alertmanager-2
   type: NodePort  
   ports:
     - port: 9093
       name: alertmanager
       targetPort: 9093
-      nodePort: 31000
+      nodePort: 32000
     - port: 9094
       name: cluster-peer
       targetPort: 9094
