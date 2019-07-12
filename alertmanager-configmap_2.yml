@@ -45,9 +45,7 @@ data:
         send_resolved: true
         title: '{{template "custom_title" .}}'
         text: '{{template "custom_slack_message" .}}'
-    # - name: pager
-    #   pagerduty_configs:
-    #   - service_key: LENONEONGOENo3u239aljeAHOFUH
+
     - name: slack_critical
       slack_configs:
       - api_url: https://hooks.slack.com/services/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
